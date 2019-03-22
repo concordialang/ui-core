@@ -4,7 +4,7 @@
   "description": "The Concordia UI Prototyper core",
   "main": "./dist/src/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --setupFiles dotenv/config",
     "prepare": "npm run build",
     "build": "tsc"
   },
@@ -33,5 +33,11 @@
       "js"
     ],
     "testRegex": "^.+\\.spec\\.ts$"
+  },
+  "dependencies": {
+    "@types/dotenv": "^6.1.0",
+    "database-js": "^3.0.8",
+    "database-js-json": "^1.2.1",
+    "dotenv": "^7.0.0"
   }
 }
