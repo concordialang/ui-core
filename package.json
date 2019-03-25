@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --setupFiles dotenv/config",
     "prepare": "npm run build",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc -w"
   },
   "repository": {
     "type": "git",

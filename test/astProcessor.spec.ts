@@ -21,7 +21,7 @@ describe('AstProcessor', () => {
       const featureInterface = expect.objectContaining({
         name: expect.any(String),
         position: expect.any(Number),
-        uiElements: expect.any(Array)
+        elements: expect.any(Array)
       })
 
       const features = await subject.process(filePath)
@@ -41,7 +41,7 @@ describe('AstProcessor', () => {
       const features = await subject.process(filePath)
 
       for (let feature of features) {
-        for (let uiElement of feature.uiElements) {
+        for (let uiElement of feature.elements) {
           expect(uiElement).toEqual(elementInterface)
         }
       }
