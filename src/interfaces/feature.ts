@@ -2,6 +2,6 @@ import { Element } from './element'
 
 export interface Feature {
   name: string
-  position: number
-  elements: Array<Element>
+  position: number // The position that the feature appears in the ast
+  elements: Element[] // The UI elements that compose the feature
 }

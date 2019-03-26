@@ -1,63 +1,52 @@
 import { Connection } from 'database-js'
-import { Element, Feature } from './interfaces'
+import { Document, Element, Feature, ProcessResult } from './interfaces'
 
 export class AstProcessor {
-  private props = ['required', 'maxlength', 'minlength', 'type']
-  private types = { 'textbox': 'text' }
+  private async filterAstFile(filePath: string): Promise<any> {
+    let connection: Connection
 
-  private async getFileContent(filePath) : Promise<any> {
-    const connection = new Connection(`json:///${filePath}`);
     try {
-      let statement = await connection.prepareStatement("SELECT docs");
-      let rows = await statement.query();
+      connection = new Connection(`json:///${filePath}`)
+      let statement = await connection.prepareStatement('SELECT docs')
+      let rows = await statement.query()
       return rows
     } catch (error) {
-      console.log(error);
+      throw error
     } finally {
-      await connection.close();
+      await connection.close()
     }
   }
 
-  private getFeatureFromDoc(doc: any) : Feature {
-    const feature = {
+  private getFeatureFromDoc(doc: Document): Feature {
+    const feature: Feature = {
       name: doc.feature.name,
       position: doc.feature.location.line,
-      elements: this.getUIElementsFromFeature(doc.feature.uiElements)
+      elements: this.buildElements(doc.feature.uiElements),
     }
 
     return feature
   }
 
-  private getUIElementsFromFeature(uiElements: Array<any>) : Array<Element> {
-    let elements = []
+  private buildElements(uiElements: any[]): Element[] {
+    const TYPE_PROPERTY = 'type'
+
+    let elements : Element[] = []
 
     for (let uiElement of uiElements) {
-      let position = uiElement.location.line
-      let widget, props = {}
-      
-      for (let item of uiElement.items) {
-        if(item.property === 'type') {
-          widget = (item.property.value || {}).value || 'input'
-        }
-        
-        if (this.props.indexOf(item.property) !== -1) {
-          if(item.value) {
-            props[item.property] = item.value.value || item.value
-          } else {
-            const type = item.nlpResult.entities.find(entity => entity.entity == 'ui_property')
-            const value = item.nlpResult.entities.find(entity => entity.entity == 'ui_element_type')
-            if(type && value) {
-              props[type.value] = this.types[value.value] || value.value
-            } 
-          }
-        }
-      }
-      
-      let element = {
+      const typeProperty = uiElement.items.find(item => item.property === TYPE_PROPERTY)      
+      const widget = typeProperty.value && typeProperty.value.value ? typeProperty.value.value : 'textbox'
+      const position = uiElement.location.line
+      const items = uiElement.items.filter(item => item.property !== TYPE_PROPERTY)
+
+      let element : Element = {
         name: uiElement.name,
         widget,
         position,
-        props
+        props: {}
+      }
+
+      for (let item of items) {
+        element.props[item.property] = item.value.value
       }
 
       elements.push(element)
@@ -66,13 +55,13 @@ export class AstProcessor {
     return elements
   }
 
-  public async process(filePath: string) : Promise<any> {
-    const content = await this.getFileContent(filePath)
+  public async processAstFile(filePath: string): Promise<ProcessResult> {
+    const content = await this.filterAstFile(filePath)
     let { docs } = content.shift()
     docs = docs.filter(doc => doc.feature)
 
-    let features: Array<Feature> = docs.map(doc => (this.getFeatureFromDoc(doc)))
-
+    const features: Feature[] = docs.map(doc => this.getFeatureFromDoc(doc))
+    
     return { features }
   }
 }

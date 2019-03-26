@@ -4,17 +4,15 @@ describe('AstProcessor', () => {
   let subject
   beforeAll(() => { subject = new AstProcessor() })
 
-  describe('process', () => {
+  describe('processAstFile', () => {
     const filePath = process.env.AST_FILE_PATH
 
-    it('should return an array', async () => {
-      const processResult = await subject.process(filePath)
-      expect(processResult).toBeInstanceOf(Array)
-    })
-
-    it('should not be an empty array', async () => {
-      const processResult = await subject.process(filePath)
-      expect(processResult).not.toHaveLength(0)
+    it('should return an array of features', async () => {
+      const expectedResult = expect.objectContaining({
+        features: expect.any(Array)
+      })
+      const processResult = await subject.processAstFile(filePath)
+      expect(processResult).toEqual(expectedResult)
     })
 
     it('should return an array of Features', async () => {
@@ -24,7 +22,7 @@ describe('AstProcessor', () => {
         elements: expect.any(Array)
       })
 
-      const features = await subject.process(filePath)
+      const features = await subject.processAstFile(filePath)
 
       for (let feature of features) {
         expect(feature).toEqual(featureInterface)
@@ -38,7 +36,7 @@ describe('AstProcessor', () => {
         position: expect.any(Number)
       })
 
-      const features = await subject.process(filePath)
+      const features = await subject.processAstFile(filePath)
 
       for (let feature of features) {
         for (let uiElement of feature.elements) {
