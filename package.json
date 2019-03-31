@@ -1,24 +1,25 @@
 {
   "name": "concordialang-ui-core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "The Concordia UI Prototyper core",
-  "main": "./dist/src/index.js",
-  "scripts": {
-    "test": "jest --setupFiles dotenv/config",
-    "prepare": "npm run build",
-    "build": "tsc",
-    "dev": "tsc -w"
-  },
+  "license": "AGPL-3.0",
+  "author": "",
+  "readme": "README.md",
+  "homepage": "https://github.com/concordialang/ui-core#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/concordialang/ui-core.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/concordialang/ui-core/issues"
   },
-  "homepage": "https://github.com/concordialang/ui-core#readme",
+  "main": "./dist/src/index.js",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "test": "jest --setupFiles dotenv/config",
+    "dev": "tsc -w"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "@types/dotenv": "^6.1.0",
