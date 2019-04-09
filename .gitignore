@@ -62,3 +62,4 @@ typings/
 
 test_output/
 dist/**/*.map
+yarn.lock
