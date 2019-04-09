@@ -1,4 +1,4 @@
-import { createFile } from '../../src/utils/createFile';
+import { createFile } from '../../src/utils/create-file';
 
 describe('createFile', () => {
   const name = './test_output/testFile'

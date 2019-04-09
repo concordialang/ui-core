@@ -1,5 +1,4 @@
-export * from './document';
-export * from './feature';
-export * from './element';
+import * as AstMappings from './ast-mappings';
+export { AstMappings };
 export * from './prototyper';
-export * from './processResult';
+export * from './process-result';

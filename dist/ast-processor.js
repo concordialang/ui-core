@@ -164,11 +164,11 @@ var AstProcessor = /** @class */ (function() {
     var feature = {
       name: doc.feature.name,
       position: doc.feature.location.line,
-      uiElements: this.buildElements(doc.feature.uiElements),
+      uiElements: this.buildUiElements(doc.feature.uiElements),
     }
     return feature
   }
-  AstProcessor.prototype.buildElements = function(uiElements) {
+  AstProcessor.prototype.buildUiElements = function(uiElements) {
     var TYPE_PROPERTY = 'type'
     var elements = []
     for (
@@ -227,4 +227,4 @@ var AstProcessor = /** @class */ (function() {
   return AstProcessor
 })()
 exports.AstProcessor = AstProcessor
-//# sourceMappingURL=astProcessor.js.map
+//# sourceMappingURL=ast-processor.js.map

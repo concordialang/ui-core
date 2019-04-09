@@ -1,4 +1,4 @@
-import { AstProcessor } from '../src/astProcessor';
+import { AstProcessor } from '../src/ast-processor';
 
 describe('AstProcessor', () => {
   let subject
@@ -19,7 +19,7 @@ describe('AstProcessor', () => {
       const featureInterface = expect.objectContaining({
         name: expect.any(String),
         position: expect.any(Number),
-        elements: expect.any(Array)
+        uiElements: expect.any(Array)
       })
 
       const features = await subject.processAstFile(filePath)
