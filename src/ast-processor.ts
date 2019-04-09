@@ -1,5 +1,6 @@
 import { Connection } from 'database-js'
-import { Document, Element, Feature, ProcessResult } from './interfaces'
+import { ProcessResult } from './interfaces'
+import { Document, UiElement, Feature } from './interfaces/ast-mappings'
 
 export class AstProcessor {
   private async filterAstFile(filePath: string): Promise<any> {
@@ -21,16 +22,16 @@ export class AstProcessor {
     const feature: Feature = {
       name: doc.feature.name,
       position: doc.feature.location.line,
-      elements: this.buildElements(doc.feature.uiElements),
+      uiElements: this.buildUiElements(doc.feature.uiElements),
     }
 
     return feature
   }
 
-  private buildElements(uiElements: any[]): Element[] {
+  private buildUiElements(uiElements: any[]): UiElement[] {
     const TYPE_PROPERTY = 'type'
 
-    let elements : Element[] = []
+    let elements : UiElement[] = []
 
     for (let uiElement of uiElements) {
       const typeProperty = uiElement.items.find(item => item.property === TYPE_PROPERTY)      
@@ -38,7 +39,7 @@ export class AstProcessor {
       const position = uiElement.location.line
       const items = uiElement.items.filter(item => item.property !== TYPE_PROPERTY)
 
-      let element : Element = {
+      let element : UiElement = {
         name: uiElement.name,
         widget,
         position,

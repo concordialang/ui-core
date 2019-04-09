@@ -128,103 +128,24 @@ var __generator =
     }
   }
 Object.defineProperty(exports, '__esModule', { value: true })
-var database_js_1 = require('database-js')
-var AstProcessor = /** @class */ (function() {
-  function AstProcessor() {}
-  AstProcessor.prototype.filterAstFile = function(filePath) {
-    return __awaiter(this, void 0, void 0, function() {
-      var connection, statement, rows, error_1
-      return __generator(this, function(_a) {
-        switch (_a.label) {
-          case 0:
-            _a.trys.push([0, 3, 4, 6])
-            connection = new database_js_1.Connection('json:///' + filePath)
-            return [4 /*yield*/, connection.prepareStatement('SELECT docs')]
-          case 1:
-            statement = _a.sent()
-            return [4 /*yield*/, statement.query()]
-          case 2:
-            rows = _a.sent()
-            return [2 /*return*/, rows]
-          case 3:
-            error_1 = _a.sent()
-            throw error_1
-          case 4:
-            return [4 /*yield*/, connection.close()]
-          case 5:
-            _a.sent()
-            return [7 /*endfinally*/]
-          case 6:
-            return [2 /*return*/]
-        }
-      })
-    })
-  }
-  AstProcessor.prototype.getFeatureFromDoc = function(doc) {
-    var feature = {
-      name: doc.feature.name,
-      position: doc.feature.location.line,
-      uiElements: this.buildElements(doc.feature.uiElements),
-    }
-    return feature
-  }
-  AstProcessor.prototype.buildElements = function(uiElements) {
-    var TYPE_PROPERTY = 'type'
-    var elements = []
-    for (
-      var _i = 0, uiElements_1 = uiElements;
-      _i < uiElements_1.length;
-      _i++
-    ) {
-      var uiElement = uiElements_1[_i]
-      var typeProperty = uiElement.items.find(function(item) {
-        return item.property === TYPE_PROPERTY
-      })
-      var widget =
-        typeProperty.value && typeProperty.value.value
-          ? typeProperty.value.value
-          : 'textbox'
-      var position = uiElement.location.line
-      var items = uiElement.items.filter(function(item) {
-        return item.property !== TYPE_PROPERTY
-      })
-      var element = {
-        name: uiElement.name,
-        widget: widget,
-        position: position,
-        props: {},
+var fs_1 = require('fs')
+var path_1 = require('path')
+var util_1 = require('util')
+function createFile(name, content, extension) {
+  return __awaiter(this, void 0, void 0, function() {
+    var writeF, fullPath
+    return __generator(this, function(_a) {
+      switch (_a.label) {
+        case 0:
+          writeF = util_1.promisify(fs_1.writeFile)
+          fullPath = path_1.format({ name: name, ext: extension })
+          return [4 /*yield*/, writeF(fullPath, content)]
+        case 1:
+          _a.sent()
+          return [2 /*return*/, fullPath]
       }
-      for (var _a = 0, items_1 = items; _a < items_1.length; _a++) {
-        var item = items_1[_a]
-        element.props[item.property] = item.value.value
-      }
-      elements.push(element)
-    }
-    return elements
-  }
-  AstProcessor.prototype.processAstFile = function(filePath) {
-    return __awaiter(this, void 0, void 0, function() {
-      var content, docs, features
-      var _this = this
-      return __generator(this, function(_a) {
-        switch (_a.label) {
-          case 0:
-            return [4 /*yield*/, this.filterAstFile(filePath)]
-          case 1:
-            content = _a.sent()
-            docs = content.shift().docs
-            docs = docs.filter(function(doc) {
-              return doc.feature
-            })
-            features = docs.map(function(doc) {
-              return _this.getFeatureFromDoc(doc)
-            })
-            return [2 /*return*/, { features: features }]
-        }
-      })
     })
-  }
-  return AstProcessor
-})()
-exports.AstProcessor = AstProcessor
-//# sourceMappingURL=astProcessor.js.map
+  })
+}
+exports.createFile = createFile
+//# sourceMappingURL=create-file.js.map

@@ -1,4 +1,4 @@
-export interface Element {
+export interface UiElement {
   name?: string
   widget: string // The type of the UI element
   position: number // The position that the UI element appears in the ast

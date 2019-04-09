@@ -1,1 +1,1 @@
-export * from './createFile';
+export * from './create-file';
