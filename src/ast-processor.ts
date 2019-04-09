@@ -22,13 +22,13 @@ export class AstProcessor {
     const feature: Feature = {
       name: doc.feature.name,
       position: doc.feature.location.line,
-      uiElements: this.buildElements(doc.feature.uiElements),
+      uiElements: this.buildUiElements(doc.feature.uiElements),
     }
 
     return feature
   }
 
-  private buildElements(uiElements: any[]): UiElement[] {
+  private buildUiElements(uiElements: any[]): UiElement[] {
     const TYPE_PROPERTY = 'type'
 
     let elements : UiElement[] = []
