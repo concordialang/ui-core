@@ -1,7 +1,7 @@
-import { Element } from './element'
+import { UiElement } from './ui-element'
 
 export interface Feature {
   name: string
   position: number // The position that the feature appears in the ast
-  elements: Element[] // The UI elements that compose the feature
+  uiElements: UiElement[] // The UI elements that compose the feature
 }
