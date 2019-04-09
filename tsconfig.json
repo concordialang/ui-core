@@ -1,19 +1,14 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "outDir": "dist",    
-        "declaration": true,
-        "sourceMap": true,
-        "allowJs": false,
-        "noImplicitAny": false,
-        "typeRoots": [
-            "./node_modules/@types"
-        ]        
-    },
-    "exclude": [
-        "node_modules",
-        "typings/globals",
-        "dist"
-    ]
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "allowJs": false,
+    "noImplicitAny": false,
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["./src"],
+  "exclude": ["node_modules", "typings/globals", "dist", "test", "dotenv"]
 }
