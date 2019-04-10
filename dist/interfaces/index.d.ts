@@ -1,4 +1,3 @@
-import * as AstMappings from './ast-mappings';
-export { AstMappings };
+export * from './ast-mappings';
 export * from './prototyper';
 export * from './process-result';
