@@ -1,1 +1,1 @@
-export * from './ui-element';
+export * from './widget';

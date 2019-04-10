@@ -30,12 +30,20 @@ export class AstProcessor {
 
   private buildUiElements(uiElements: any[]): UiElement[] {
     const TYPE_PROPERTY = 'type'
+    const UI_ELEMENT_TYPE = 'ui_element_type'
 
     let elements : UiElement[] = []
 
     for (let uiElement of uiElements) {
-      const typeProperty = uiElement.items.find(item => item.property === TYPE_PROPERTY)      
-      const widget = typeProperty.value && typeProperty.value.value ? typeProperty.value.value : 'textbox'
+      const entities = uiElement.items.find(item => item.property === TYPE_PROPERTY).nlpResult.entities
+      const entityType = entities.find(entity => entity.entity === UI_ELEMENT_TYPE)
+      let widget = entityType && entityType.value
+
+      if(!widget) {
+        const typeProperty = uiElement.items.find(item => item.property === TYPE_PROPERTY)
+        widget = typeProperty.value && typeProperty.value.value || 'textbox'
+      }
+
       const position = uiElement.location.line
       const items = uiElement.items.filter(item => item.property !== TYPE_PROPERTY)
 
@@ -62,7 +70,7 @@ export class AstProcessor {
     docs = docs.filter(doc => doc.feature)
 
     const features: Feature[] = docs.map(doc => this.getFeatureFromDoc(doc))
-    
+
     return { features }
   }
 }

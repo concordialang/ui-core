@@ -182,6 +182,7 @@ var AstProcessor = /** @class */ (function() {
 	}
 	AstProcessor.prototype.buildUiElements = function(uiElements) {
 		var TYPE_PROPERTY = 'type'
+		var UI_ELEMENT_TYPE = 'ui_element_type'
 		var elements = []
 		for (
 			var _i = 0, uiElements_1 = uiElements;
@@ -189,13 +190,21 @@ var AstProcessor = /** @class */ (function() {
 			_i++
 		) {
 			var uiElement = uiElements_1[_i]
-			var typeProperty = uiElement.items.find(function(item) {
+			var entities = uiElement.items.find(function(item) {
 				return item.property === TYPE_PROPERTY
+			}).nlpResult.entities
+			var entityType = entities.find(function(entity) {
+				return entity.entity === UI_ELEMENT_TYPE
 			})
-			var widget =
-				typeProperty.value && typeProperty.value.value
-					? typeProperty.value.value
-					: 'textbox'
+			var widget = entityType && entityType.value
+			if (!widget) {
+				var typeProperty = uiElement.items.find(function(item) {
+					return item.property === TYPE_PROPERTY
+				})
+				widget =
+					(typeProperty.value && typeProperty.value.value) ||
+					'textbox'
+			}
 			var position = uiElement.location.line
 			var items = uiElement.items.filter(function(item) {
 				return item.property !== TYPE_PROPERTY

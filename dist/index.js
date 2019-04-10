@@ -4,6 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, '__esModule', { value: true })
 __export(require('./ast-processor'))
-__export(require('./interfaces'))
 __export(require('./classes'))
 __export(require('./utils'))

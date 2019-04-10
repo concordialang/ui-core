@@ -1,7 +1,7 @@
 /**
  * This class must be used by plugins to generate UI elements.
  */
-export abstract class UiElement {
+export abstract class Widget {
   protected name?: string | undefined
   protected props: { [key: string]: string | number | boolean }
 
