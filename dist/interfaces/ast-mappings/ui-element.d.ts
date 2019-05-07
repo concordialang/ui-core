@@ -3,6 +3,6 @@ export interface UiElement {
     widget: string;
     position: number;
     props: {
-        [key: string]: string | number | boolean;
+        [key: string]: string | number | boolean | any[];
     };
 }

@@ -4,7 +4,7 @@
 export declare abstract class Widget {
     protected name?: string | undefined;
     protected props: {
-        [key: string]: string | number | boolean;
+        [key: string]: string | number | boolean | any[];
     };
     constructor(props: any, name?: string);
     abstract renderToString(): string;
