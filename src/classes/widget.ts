@@ -3,7 +3,7 @@
  */
 export abstract class Widget {
   protected name?: string | undefined
-  protected props: { [key: string]: string | number | boolean }
+  protected props: { [key: string]: string | number | boolean | any[] }
 
   constructor(props: any, name?: string) {
     this.props = props
