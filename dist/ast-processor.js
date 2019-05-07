@@ -173,16 +173,13 @@ var AstProcessor = /** @class */ (function() {
 		})
 	}
 	AstProcessor.prototype.getFeatureFromDoc = function(doc) {
-		var feature = {
-			name: doc.feature.name,
-			position: doc.feature.location.line,
-			uiElements: this.buildUiElements(doc.feature.uiElements),
-		}
+		var name = doc.feature.name
+		var position = doc.feature.location.line
+		var uiElements = this.buildUiElements(doc.feature.uiElements)
+		var feature = { name: name, position: position, uiElements: uiElements }
 		return feature
 	}
 	AstProcessor.prototype.buildUiElements = function(uiElements) {
-		var TYPE_PROPERTY = 'type'
-		var UI_ELEMENT_TYPE = 'ui_element_type'
 		var elements = []
 		for (
 			var _i = 0, uiElements_1 = uiElements;
@@ -190,38 +187,56 @@ var AstProcessor = /** @class */ (function() {
 			_i++
 		) {
 			var uiElement = uiElements_1[_i]
-			var entities = uiElement.items.find(function(item) {
-				return item.property === TYPE_PROPERTY
-			}).nlpResult.entities
-			var entityType = entities.find(function(entity) {
-				return entity.entity === UI_ELEMENT_TYPE
-			})
-			var widget = entityType && entityType.value
-			if (!widget) {
-				var typeProperty = uiElement.items.find(function(item) {
-					return item.property === TYPE_PROPERTY
-				})
-				widget =
-					(typeProperty.value && typeProperty.value.value) ||
-					'textbox'
-			}
+			var name_1 = uiElement.name
+			var widget = this.getUiElementType(uiElement) || 'textbox'
 			var position = uiElement.location.line
-			var items = uiElement.items.filter(function(item) {
-				return item.property !== TYPE_PROPERTY
-			})
+			var props = this.getUiElementProps(uiElement)
 			var element = {
-				name: uiElement.name,
+				name: name_1,
 				widget: widget,
 				position: position,
-				props: {},
-			}
-			for (var _a = 0, items_1 = items; _a < items_1.length; _a++) {
-				var item = items_1[_a]
-				element.props[item.property] = item.value.value
+				props: props,
 			}
 			elements.push(element)
 		}
 		return elements
+	}
+	AstProcessor.prototype.getUiElementType = function(uiElement) {
+		var TYPE_PROPERTY = 'type'
+		var UI_ELEMENT_TYPE = 'ui_element_type'
+		var entities = uiElement.items.find(function(item) {
+			return item.property === TYPE_PROPERTY
+		}).nlpResult.entities
+		var elementType = entities.find(function(entity) {
+			return entity.entity === UI_ELEMENT_TYPE
+		}).value
+		return elementType
+	}
+	AstProcessor.prototype.valueIsArray = function(value) {
+		var regex = /^[a-z]*\s(is in)\s\[.*\]$/
+		return !!value.match(regex)
+	}
+	AstProcessor.prototype.extractArrayFromValue = function(value) {
+		var regex = /\[.*\]/g
+		var match = regex.exec(value)
+		var values = match[0].replace(/(\[|\"|\])/g, '').split(',')
+		return values
+	}
+	AstProcessor.prototype.getUiElementProps = function(uiElement) {
+		var TYPE_PROPERTY = 'type'
+		var items = uiElement.items.filter(function(item) {
+			return item.property !== TYPE_PROPERTY
+		})
+		var props = {}
+		for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
+			var item = items_1[_i]
+			if (item.property === 'value' && this.valueIsArray(item.content)) {
+				props[item.property] = this.extractArrayFromValue(item.content)
+			} else {
+				props[item.property] = item.value.value
+			}
+		}
+		return props
 	}
 	AstProcessor.prototype.processAstFile = function(filePath) {
 		return __awaiter(this, void 0, void 0, function() {
