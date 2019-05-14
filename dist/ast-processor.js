@@ -218,8 +218,15 @@ var AstProcessor = /** @class */ (function() {
 	}
 	AstProcessor.prototype.extractArrayFromValue = function(value) {
 		var regex = /\[.*\]/g
+		// get the stringified array definition in the sentence
 		var match = regex.exec(value)
-		var values = match[0].replace(/(\[|\"|\])/g, '').split(',')
+		// convert string to array, removing whitespaces
+		var values = match[0]
+			.replace(/(\[|\"|\])/g, '')
+			.split(',')
+			.map(function(value) {
+				return value.trim()
+			})
 		return values
 	}
 	AstProcessor.prototype.getUiElementProps = function(uiElement) {

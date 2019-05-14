@@ -61,8 +61,10 @@ export class AstProcessor {
 
 	private extractArrayFromValue(value: string): any[] {
 		const regex = /\[.*\]/g
+		// get the stringified array definition in the sentence
 		const match = regex.exec(value)
-		const values = match[0].replace(/(\[|\"|\])/g, '').split(',')
+		// convert string to array, removing whitespaces
+		const values = match[0].replace(/(\[|\"|\])/g, '').split(',').map(value => (value.trim()))
 		return values
 	}
 
