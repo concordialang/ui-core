@@ -135,16 +135,19 @@ var __generator =
 		}
 	}
 Object.defineProperty(exports, '__esModule', { value: true })
-var fs_1 = require('fs')
+var fs = require('fs')
 var path_1 = require('path')
 var util_1 = require('util')
-function createFile(name, content, extension) {
+function createFile(name, content, extension, fsLib) {
+	if (fsLib === void 0) {
+		fsLib = fs
+	}
 	return __awaiter(this, void 0, void 0, function() {
 		var writeF, fullPath
 		return __generator(this, function(_a) {
 			switch (_a.label) {
 				case 0:
-					writeF = util_1.promisify(fs_1.writeFile)
+					writeF = util_1.promisify(fsLib.writeFile)
 					fullPath = path_1.format({ name: name, ext: extension })
 					return [4 /*yield*/, writeF(fullPath, content)]
 				case 1:

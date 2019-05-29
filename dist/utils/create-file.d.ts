@@ -1,1 +1,1 @@
-export declare function createFile(name: string, content: string, extension: string): Promise<string>;
+export declare function createFile(name: string, content: string, extension: string, fsLib?: any): Promise<string>;
