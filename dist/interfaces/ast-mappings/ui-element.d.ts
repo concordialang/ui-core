@@ -1,5 +1,5 @@
 export interface UiElement {
-    name?: string;
+    name: string;
     widget: string;
     position: number;
     props: {
