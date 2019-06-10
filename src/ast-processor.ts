@@ -54,34 +54,18 @@ export class AstProcessor {
 		return elementType
 	}
 
-	private valueIsArray(value: string): boolean {
-		const regex = /^[a-z]*\s(is in)\s\[.*\]$/
-		return !!value.match(regex)
-	}
-
-	private extractArrayFromValue(value: string): any[] {
-		const regex = /\[.*\]/g
-		// get the stringified array definition in the sentence
-		const match = regex.exec(value)
-		// convert string to array, removing whitespaces
-		const values = match[0].replace(/(\[|\"|\])/g, '').split(',').map(value => (value.trim()))
-		return values
-	}
-
 	private getUiElementProps(uiElement: any): any {
-		const TYPE_PROPERTY = 'type'
-		const items = uiElement.items.filter(item => item.property !== TYPE_PROPERTY)
-		let props = {}
+		const items = uiElement.items.filter(item => item.property !== 'type')
+		let uiElementProps = {}
 
 		for (let item of items) {
-			if (item.property === 'value' && this.valueIsArray(item.content)) {
-				props[item.property] = this.extractArrayFromValue(item.content)
-			} else {
-				props[item.property] = item.value.value
-			}
+			const entities = item.nlpResult.entities
+			const propertyEntity = entities.find(e => e.entity === 'ui_property').value
+			const valueEntity = entities.find(e => e.entity === 'value' || e.entity === 'value_list')
+			uiElementProps[propertyEntity] = valueEntity ? valueEntity.value : true
 		}
 
-		return props
+		return uiElementProps
 	}
 
 	public async processAstFile(filePath: string): Promise<ProcessResult> {
